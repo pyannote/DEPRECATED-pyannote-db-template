@@ -43,9 +43,9 @@ def get_config():
     cfg.style = "pep440"
     cfg.tag_prefix = ""
     # replace mydatabase the same way you did in "setup.py"
-    cfg.parentdir_prefix = "pyannote-db-mydatabase-"
+    cfg.parentdir_prefix = "pyannote-db-odessa-ip-"
     # replace MyDatabase the same way you did in "setup.py"
-    cfg.versionfile_source = "MyDatabase/_version.py"
+    cfg.versionfile_source = "odessa/_version.py"
     cfg.verbose = False
     return cfg
 
