@@ -49,6 +49,13 @@ class Fullset(SpeakerDiarizationProtocol):
         # absolute path to 'data' directory where annotations are stored
         data_dir = Path(__file__).parent / 'data' / 'speaker_diarization'
 
+        annotated = data_dir / 'fullset.uem'
+        names = ['uri', 'NA0', 'start', 'end']
+        annotated = read_table(annotated, delim_whitespace=True, names=names)
+        annotated_segments = {}
+        for segment in annotated.itertuples():
+            annotated_segments[segment.uri] = Segment(start=segment.start, end=segment.end)
+
         # iterate through the text annotation files
         for filename in os.listdir(data_dir):
             if filename.endswith(".txt"):
@@ -56,18 +63,16 @@ class Fullset(SpeakerDiarizationProtocol):
                 annotation = Annotation(uri=uri)
 
                 names = ['start', 'end', 'speaker', 'speakerID']
-                parsed_file = read_table(filename, delim_whitespace=True, names=names)
+                parsed_file = read_table(os.path.join(data_dir, filename), delim_whitespace=True, names=names)
                 for t, turn in enumerate(parsed_file.itertuples()):
                     segment = Segment(start=turn.start,
                                       end=turn.end)
                     annotation[segment, t] = turn.speakerID
 
-                annotated_segments = [Segment(start=0, end=annotation[-1].end)]
-
                 current_file = {
                     'database': 'Odessa',
                     'uri': uri,
-                    'annotated': Timeline(uri=uri, segments=annotated_segments),
+                    'annotated': Timeline(uri=uri, segments=annotated_segments[uri]),
                     'annotation': annotation}
 
                 yield current_file
