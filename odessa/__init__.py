@@ -72,7 +72,7 @@ class Fullset(SpeakerDiarizationProtocol):
                 current_file = {
                     'database': 'Odessa',
                     'uri': uri,
-                    'annotated': Timeline(uri=uri, segments=annotated_segments[uri]),
+                    'annotated': Timeline(uri=uri, segments=[annotated_segments[uri]]),
                     'annotation': annotation}
 
                 yield current_file
