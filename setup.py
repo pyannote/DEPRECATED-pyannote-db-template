@@ -25,7 +25,7 @@
 #
 # AUTHORS
 # Hervé BREDIN - http://herve.niderb.fr/
-
+# Pavel KORSHUNOV - pavel.korshunov@idiap.ch
 
 import versioneer
 from setuptools import setup, find_packages
@@ -63,9 +63,13 @@ setup(
         "Programming Language :: Python :: 3.5",
         "Topic :: Scientific/Engineering"
     ],
+    entry_points={
+        'console_scripts': [
+            'prepare_spkspt_protocol.py=odessa.prepare_spkspt_protocol:main',
+        ],
+        'pyannote.database.databases': [
+            'Odessa = odessa.__init__:Odessa',
+        ],
+    },
 
-    entry_points="""
-        [pyannote.database.databases]
-        odessa=odessa:Odessa
-    """
 )
