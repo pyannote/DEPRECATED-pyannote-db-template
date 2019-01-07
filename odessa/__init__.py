@@ -158,8 +158,10 @@ class SpeakerSpotting(SpeakerDiarization, SpeakerSpottingProtocol):
 
     def tst_try_iter(self):
         def get_turns(uri):
-            ref_file_path = Path(__file__).parent / 'data' / 'speaker_diarization' / uri + '.txt'
-            return read_table(os.path.join(data_dir, ref_file_path), delim_whitespace=True, names=names)
+            ref_file_path = Path(__file__).parent / 'data' / 'speaker_diarization' / uri
+            ref_file_path = Path(str(ref_file_path) + '.txt')
+            gt_names = ['start', 'end', 'speaker', 'speakerID']
+            return read_table(os.path.join(data_dir, ref_file_path), delim_whitespace=True, names=gt_names)
 
         diarization = getattr(self, 'diarization', True)
 
@@ -188,10 +190,10 @@ class SpeakerSpotting(SpeakerDiarization, SpeakerSpottingProtocol):
                 turns = get_turns(uri)
                 for t, turn in enumerate(turns.itertuples()):
                     segment = Segment(start=turn.start,
-                                      end=turn.start + turn.duration)
+                                      end=turn.end)
                     if not (segment & try_with):
                         continue
-                    annotation[segment, t] = turn.speaker
+                    annotation[segment, t] = turn.speakerID
 
                 annotation = annotation.crop(try_with)
                 reference = annotation.label_timeline(speaker)
@@ -216,7 +218,7 @@ class SpeakerSpotting(SpeakerDiarization, SpeakerSpottingProtocol):
                     turns = get_turns(uri).get_group(speaker)
                     for t, turn in enumerate(turns.itertuples()):
                         segment = Segment(start=turn.start,
-                                          end=turn.start + turn.duration)
+                                          end=turn.end)
                         segments.append(segment)
                 reference = Timeline(uri=uri, segments=segments).crop(try_with)
 
