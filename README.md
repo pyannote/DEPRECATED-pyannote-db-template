@@ -13,9 +13,10 @@ $ cat ~/.pyannote/db.yml
 Odessa: /path/to/odessa/audio/original/{uri}.wav
 ```
 
+Odessa database has only Test set for all the protocols.
+
 ## Speaker diarization protocol
 
-Odessa database has only Train and Test sets.
 
 Protocol is initialized as follows:
 
@@ -25,42 +26,6 @@ Protocol is initialized as follows:
 >>> protocol = get_protocol('Odessa.SpeakerDiarization.Fullset',
 ...                         preprocessors=preprocessors)
 ```
-
-### Training
-
-For background training (e.g.
-[GMM/UBM](http://www.sciencedirect.com/science/article/pii/S1051200499903615), [i-vector](http://ieeexplore.ieee.org/document/5545402/), or [TristouNet neural embedding](https://arxiv.org/abs/1609.04301)), files of the training set can be
-iterated using `protocol.train()`:
-
-```python
->>> for current_file in protocol.train():
-...
-...     # path to the audio file
-...     audio = current_file['audio']
-...
-...     # "who speaks when" reference
-...     reference = current_file['annotation']
-...
-...     # when current_file has an 'annotated' key, it indicates that
-...     # annotations are only provided for some regions of the file.
-...     annotated = current_file['annotated']
-...     # See http://pyannote.github.io/pyannote-core/structure.html#timeline
-...
-...     # train...
-```
-
-`reference` is a pyannote.core.Annotation. In particular, it can be iterated
-as follows:
-
-```python
->>> for segment, _, speaker in reference.itertracks(yield_label=True):
-...
-...     print('Speaker {speaker} speaks between {start}s and {end}s'.format(
-...         speaker=speaker, start=segment.start, end=segment.end))
-```
-See http://pyannote.github.io/pyannote-core/structure.html#annotation for
-details on other ways to use this data structure.
-
 
 ### Test / Evaluation
 
@@ -87,13 +52,6 @@ details on other ways to use this data structure.
 
 ## Speaker spotting procotol
 
-In order to use the Odessa dataset for the evaluation of speaker spotting systems,
-the original speaker diarization training/test split has been
-redefined.
-
-Moreover, original files have also been split into shorter sessions in order to
-increase the number of trials.
-
 Protocol is initialized as follows:
 
 ```python
@@ -102,10 +60,6 @@ Protocol is initialized as follows:
 >>> protocol = get_protocol('Odessa.SpeakerSpotting.Fullset',
 ...                         preprocessors=preprocessors)
 ```
-
-### Training
-
-`protocol.train()` can be used like in the speaker diarization protocol above.
 
 ### Enrolment
 

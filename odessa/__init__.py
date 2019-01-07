@@ -129,7 +129,7 @@ class SpeakerSpotting(SpeakerDiarization, SpeakerSpottingProtocol):
                  'NA1', 'NA2', 'NA3', 'model_id']
         enrolments = read_table(enrolments, delim_whitespace=True, names=names)
 
-        for model_id, turns in enrolments.groupby(by='model_id'):
+        for model_id, turns in enrolments.groupby(by=['uri', 'model_id']):
 
             # gather enrolment data
             segments = []
@@ -146,7 +146,7 @@ class SpeakerSpotting(SpeakerDiarization, SpeakerSpottingProtocol):
             current_enrolment = {
                 'database': 'Odessa',
                 'uri': uri,
-                'model_id': model_id,
+                'model_id': model_id[1],  # model_id
                 'enrol_with': enrol_with,
             }
 
