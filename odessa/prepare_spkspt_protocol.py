@@ -103,9 +103,14 @@ def write_test_file(data_dir, output_file, trial_length):
     with open(output_file, 'w') as f:
         for label in speakers.keys():
             for annotation in annotations:
+                # make sure our trial segments are not extending beyond the total length of the speech data
+                support = annotation.get_timeline().extent()
+                # we consider smaller segment here to make sure an embedding of 3 seconds can be computed
+                adjusted_trial_segments = trial_segments.crop(Segment(start=support.start, end=support.end - 3.),
+                                                              mode='loose')
                 uri = annotation.uri
                 cur_timeline = annotation.label_timeline(label, copy=False)
-                for trial_segment in trial_segments:
+                for trial_segment in adjusted_trial_segments:
                     cropped_speaker = cur_timeline.crop(trial_segment, mode='intersection')
                     if not cropped_speaker:
                         f.write('{0} {1} {2:0>7.2f} {3:0>7.2f} nontarget - -\n'.format(

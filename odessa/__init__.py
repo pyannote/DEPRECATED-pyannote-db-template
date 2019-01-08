@@ -107,10 +107,9 @@ class SpeakerSpotting(SpeakerDiarization, SpeakerSpottingProtocol):
             for segment in annotated:
                 sessions = SlidingWindow(start=segment.start,
                                          duration=30., step=30.,
-                                         end=segment.end - 30.)
+                                         end=segment.end - 3.)
 
                 for session in sessions:
-
                     session_file = dict(current_file)
                     session_file['annotated'] = annotated.crop(session)
                     session_file['annotation'] = annotation.crop(session)
@@ -215,8 +214,8 @@ class SpeakerSpotting(SpeakerDiarization, SpeakerSpottingProtocol):
                 # set to False -- leading to a faster implementation...
                 segments = []
                 if trial.target == 'target':
-                    turns = get_turns(uri).get_group(speaker)
-                    for t, turn in enumerate(turns.itertuples()):
+                    turns = get_turns(uri).groupby(by='speakerID')
+                    for t, turn in enumerate(turns.get_group(speaker).itertuples()):
                         segment = Segment(start=turn.start,
                                           end=turn.end)
                         segments.append(segment)
