@@ -1,3 +1,6 @@
+:warning: This is no longer supported. See [`pyannote.database`](http://github.com/pyannote/pyannote-database) documentation instead. :warning:
+
+
 # pyannote.database plugin
 
 This repository provides a template for creating your own [`pyannote.database`](http://github.com/pyannote/pyannote-database) plugin.
@@ -9,6 +12,5 @@ This repository provides a template for creating your own [`pyannote.database`](
 5. Rename `MyDatabase` directory to the name of your database (e.g. to [`Etape`](http://github.com/pyannote/pyannote-db-etape) or [`REPERE`](http://github.com/pyannote/pyannote-db-repere))
 6. Commit and tag your changes using [`semantic versioning`](http://semver.org)
 7. Run `pip install -e .` and enjoy!
-
 
 In case your database is public and you want to share, I'd be happy to integrate your plugin in `pyannote`: a [pull request](https://help.github.com/articles/about-pull-requests/) to this repository should help us get started...
